@@ -1,0 +1,59 @@
+.technologies {
+  min-height: 600px;
+  max-width: 100vw;
+  padding: 100px 0;
+  overflow: hidden;
+
+  .heading {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 67px;
+    align-items: center;
+  }
+
+  .animationWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 9999;
+
+    .technologiesBody {
+      position: absolute;
+
+      .stackWrapper {
+        width: min-content;
+        height: 66px;
+        left: 559px;
+        top: 241px;
+
+        background: #ffffff;
+        box-shadow: 0 5px 23px rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+
+        display: grid;
+        grid-template: 1fr / 33px 1fr;
+        align-items: center;
+
+        grid-gap: 22px;
+        padding: 0 20px;
+
+        p {
+          font-family: 'Gilroy', sans-serif;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 18px;
+          line-height: 22px;
+          margin: 0;
+
+          color: #0d0d0d;
+        }
+      }
+    }
+
+    .bgVectorWrapper {
+      svg {
+      }
+    }
+  }
+}

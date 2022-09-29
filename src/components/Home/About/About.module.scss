@@ -1,0 +1,192 @@
+.main {
+  padding: 100px 0;
+  width: 100%;
+  height: auto;
+  @media (max-width: 500px){
+    padding-bottom: 0px;
+  }
+  .block {
+    display: grid;
+    grid-template: 1fr / 1fr 470px;
+    grid-gap: 50px;
+
+    @media (max-width: 1200px) {
+      grid-template: 1fr 552px / 1fr;
+    }
+
+    @media (max-width: 768px) {
+      grid-template: 1fr 348 / 1fr;
+    }
+
+    .firstBlock {
+      flex-basis: 55%;
+
+      .heading {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 67px;
+      }
+
+      .content {
+        color: #272727;
+        h4 {
+          max-width: 525px;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 24px;
+          line-height: 30px;
+          margin-bottom: 32px;
+        }
+
+        .contentBlock {
+          max-width: 570px;
+          display: grid;
+          grid-template: 1fr / 10px 1fr;
+          grid-gap: 16px;
+          margin: 22px 0;
+        }
+
+        .contentBlock img {
+          padding: 3px;
+          margin-right: 16px;
+        }
+      }
+
+      .buttons {
+        max-width: min-content;
+        position: relative;
+        margin-top: 67px;
+        display: grid;
+        grid-template: 1fr / 153px 152px minmax(120px, 200px);
+        grid-gap: 10px;
+        align-items: center;
+        justify-items: center;
+
+        @media (max-width: 1200px) {
+          max-width: 100%;
+          grid-template: 1fr / 153px 152px 20px;
+        }
+
+        @media (max-width: 768px) {
+          max-width: 100%;
+          grid-template: auto auto / 1fr;
+          grid-gap: 50px;
+        }
+
+        .watch {
+          width: 152px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+
+          span {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 17px;
+ 
+            background: -webkit-linear-gradient(
+              97.01deg,
+              orangered -4.32%,
+              red 89.23%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+        }
+
+        .watchArrow {
+          width: 100%;
+          span {
+            overflow: visible;
+          }
+
+          @media (max-width: 1200px) {
+            width: min-content;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) rotate(-44deg);
+            top: 20px;
+          }
+          @media (max-width: 768px) {
+            top: 90%;
+            left: 65%;
+            transform: translateX(-50%);
+          }
+        }
+      }
+
+      .buttons button {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 17px;
+        color: #fff;
+        padding: 12px 30px;
+        background: linear-gradient(97.01deg, orangered -4.32%, red 89.23%);
+        border-radius: 20px;
+      }
+    }
+
+    .playIcon {
+      margin-right: 10px;
+    }
+
+    .arrow {
+      margin-right: -50px;
+    }
+
+    .secondBlock {
+      position: relative;
+      width: 100% !important;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .play {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-position: center;
+        background-size: cover;
+        clip-path: polygon(50% 0, 100% 24%, 100% 76%, 50% 100%, 0 76%, 0 24%);
+
+        .play_icon {
+          cursor: pointer;
+          z-index: 1;
+        }
+
+        .videoWrapper {
+          height: 100%;
+          width: 100%;
+
+          .closeIcon {
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.slider{
+  margin-top: 150px;
+  @media (max-width: 1024px){
+    margin-bottom: 150px !important;
+  }
+  @media (max-width: 768px){
+    margin: 0px !important;
+  }
+}
+

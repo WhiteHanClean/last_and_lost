@@ -1,0 +1,68 @@
+.circle {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+}
+
+
+
+.dots {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+//.dots:before {
+//  content: "";
+//  position: absolute;
+//  width: 10px;
+//  height: 10px;
+//  background: #fff;
+//  border-radius: 50%;
+//  left: calc(50% - 5px);
+//  top: 0;
+//  //box-shadow: 50px 0 0 #fff, -65px -50px 0 #fff, -65px 50px 0 #fff,
+//  //  -55px 0 0 #f07e6e, 45px 35px 0 #84cdfa, -40px -40px 0 #5ad1cd,
+//  //  40px -40px 0 #fff, 55px -59px 0 #fff;
+//  //animation: animate 10s linear infinite;
+//}
+
+//.dots:after {
+//  content: "";
+//  position: absolute;
+//  width: 10px;
+//  height: 10px;
+//  background: #fff;
+//  border-radius: 50%;
+//  left: calc(50% - 5px);
+//  bottom: 0;
+//  //box-shadow: -50px 0 0 #fff, 65px 50px 0 #fff, 65px -50px 0 #fff,
+//  //  55px 0 0 #84cdfa, -45px -35px 0 #f07e6e, 40px 40px 0 #5ad1cd,
+//  //  -40px 40px 0 #fff, -55px 59px 0 #fff;
+//  //animation: animate 10s linear infinite;
+//}
+
+@keyframes animate {
+  0% {
+    transform: scale(1) translate(10%) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.5) translate(80%) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) translate(10%) rotate(360deg);
+  }
+}
+
+@keyframes animateReverse {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-180deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}

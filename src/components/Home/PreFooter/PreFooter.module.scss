@@ -1,0 +1,80 @@
+.preFooter {
+  background: rgba(13, 13, 13, 1);
+  text-align: center;
+  padding-bottom: 105px;
+  position: relative;
+  overflow: hidden;
+  color: #272727;
+}
+.whiteBlock {
+  width: 100%;
+  padding: 94px 0 0 0;
+  background: white;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(1.2);
+  position: sticky;
+}
+.whiteBlock h2 {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 52px;
+  line-height: 91px;
+  margin-bottom: 5px;
+}
+.whiteBlock p {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 17px;
+  margin-bottom: 42px;
+}
+
+@media (max-width: 992px) {
+}
+
+@media (max-width: 768px) {
+  .whiteBlock h2 {
+    max-width: 300px;
+    font-size: 30px;
+    line-height: 37px;
+    margin-bottom: 20px;
+  }
+  .whiteBlock p {
+    max-width: 325px;
+    line-height: 23px;
+  }
+}
+
+.whiteBlock button {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  color: #fff;
+  padding: 12px 40px;
+  background: linear-gradient(97.01deg, orangered -4.32%, red 89.23%);
+  border-radius: 20px;
+  border: none;
+  margin-bottom: 105px;
+}
+
+@media (max-width: 320px) {
+  .whiteBlock{
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .whiteBlock h2 {
+    max-width: 300px;
+    font-size: 25px;
+    line-height: 37px;
+    margin-bottom: 20px;
+  }
+  .whiteBlock p {
+    max-width: 325px;
+    line-height: 23px;
+    font-size: 20px;
+  }
+}
