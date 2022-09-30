@@ -247,7 +247,6 @@ const Solutions = () => {
               <h3>Договор</h3>
               <p>Попробуйте связаться</p>
               <p>и поговорить о возврате</p>
-
             </div>
           </div>
           <div className={style.block}>
@@ -322,94 +321,6 @@ const Solutions = () => {
               <h3>Психология</h3>
               <p>Не забываем быть вежливыми!</p>
             </div>
-          </div>
-        </motion.div>
-        <motion.div
-          id='contacts'
-          className={style.projectBlock}
-          initial='hidden'
-          whileInView='visible'
-          transition={{ duration: 0.5 }}
-          variants={{
-            visible: { opacity: 1, scale: 1 },
-            hidden: { opacity: 0, scale: 0 },
-          }}
-        >
-          <div className={style.titleBlock}>
-            <h2>Apply now</h2>
-            <p>Let’s contact with us!</p>
-          </div>
-          <div className={style.inputBlock}>
-            <div className={style.inputBlock_first}>
-              <TextField
-                autoComplete='off'
-                id='Name'
-                label='Name'
-                value={name}
-                variant='outlined'
-                onChange={(e) => setName(e.target.value)}
-                className={style.io}
-              />
-              <TextField
-                autoComplete='off'
-                id='Email'
-                label='Email'
-                value={email}
-                variant='outlined'
-                type='email'
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className={style.inputBlock_second}>
-              <TextField
-                autoComplete='off'
-                id='Years'
-                label='Years of Experience'
-                value={year}
-                type='number'
-                variant='outlined'
-                onChange={(e) => setYear(e.target.value)}
-                className={style.io}
-              />
-              <TextField
-                autoComplete='off'
-                id='Phone number'
-                label='Phone number'
-                value={phone}
-                ariant='outlined'
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            <h5>Position</h5>
-            <div className={style.inputBlock_footer}>
-              <div className={style.radio}>
-                <label htmlFor='radio-buttons'>Owner Operator</label>
-                <Radio
-                  checked={selectedValue === 'Owner Operator'}
-                  onChange={handleChange}
-                  value='Owner Operator'
-                  name='radio-buttons'
-                  inputProps={{ 'aria-label': 'A' }}
-                />
-                <label htmlFor='radio-buttons' className={style.driver}>
-                  Driver
-                </label>
-                <Radio
-                  checked={selectedValue === 'Driver'}
-                  onChange={handleChange}
-                  value='Driver'
-                  name='radio-buttons'
-                  inputProps={{ 'aria-label': 'B' }}
-                />
-              </div>
-              <button onClick={() => gagaTo(data)}>Apply</button>
-            </div>
-          </div>
-          <div className={style.rightDotted}>
-            <Image src={DottedSqIcon} />
-          </div>
-          <div className={style.leftDotted}>
-            <Image src={DottedSqIcon} />
           </div>
         </motion.div>
       </div>

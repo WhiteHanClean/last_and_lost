@@ -10,7 +10,7 @@ function Analytics() {
       const { innerHeight, pageYOffset } = window;
 
       if (ref) {
-        if (ref.current.offsetTop <= innerHeight + pageYOffset - 50) {
+        if (ref.current.offsetTop || 0 <= innerHeight + pageYOffset - 50) {
           setInView(true);
         } else {
           setInView(false);
@@ -21,7 +21,7 @@ function Analytics() {
       const { innerHeight, pageYOffset } = window;
 
       if (ref) {
-        if (ref.current.offsetTop <= innerHeight + pageYOffset - 50) {
+        if (ref.current.offsetTop || 0 <= innerHeight + pageYOffset - 50) {
           setInView(true);
         } else {
           setInView(false);
