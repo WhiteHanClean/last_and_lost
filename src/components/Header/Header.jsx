@@ -29,7 +29,6 @@ const Header = ({ inView }) => {
             <Link href='/Found'>
               <p>Found</p>
             </Link>
-            {/* <Link href="/#solutions"><p>SOLUTIONS</p></Link> */}
             <Link href='/Auth'>
               <button className={style.button}>
                 Login <output></output>

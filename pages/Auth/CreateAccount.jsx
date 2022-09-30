@@ -3,19 +3,36 @@ import Link from 'next/link';
 import React from 'react';
 import { useState } from 'react';
 import cls from './auth.module.scss';
+import { useDispatch } from 'react-redux';
+import { signUpUser } from '../../src/store/authSlice';
+import { useRouter } from 'next/router';
 
 const CreateAccount = () => {
-  const [name, setName] = useState('');
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name || !email || password) {
-      console.log(email, password);
+    if (!!username || !!email || !!phone || !!password) {
+      dispatch(
+        signUpUser({
+          username,
+          email,
+          phone,
+          password,
+        })
+      );
       setEmail('');
       setPassword('');
-      setName('');
+      setUsername('');
+      setPhone('');
+      router.push('/Auth');
+    } else {
+      alert('user data incorrect');
     }
   };
 
@@ -33,9 +50,9 @@ const CreateAccount = () => {
                 id='name'
                 label='Name'
                 fullWidth
-                value={name}
+                value={username}
                 variant='outlined'
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <TextField
                 autoComplete='off'
@@ -49,8 +66,17 @@ const CreateAccount = () => {
               <TextField
                 autoComplete='off'
                 fullWidth
-                id='pass'
+                id='phone'
                 type={'number'}
+                label='Phone'
+                value={phone}
+                variant='outlined'
+                onChange={(e) => setPhone(e.target.value)}
+              />
+              <TextField
+                autoComplete='off'
+                fullWidth
+                id='pass'
                 label='Password'
                 value={password}
                 variant='outlined'

@@ -3,10 +3,9 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import $api from '../../utils/axios';
+import $api from '../utils/axios';
 
 const initialState = {
-  isAuthenticated: false,
   signup: false,
   loading: false,
   error: null,
@@ -15,6 +14,7 @@ const initialState = {
   mail: null,
   ids: [],
   entities: {},
+  token: null,
 };
 
 export const authAdapter = createEntityAdapter();
@@ -22,9 +22,9 @@ export const authSelectors = authAdapter.getSelectors((state) => state.auth);
 
 export const signUpUser = createAsyncThunk(
   'auth/signUpUser',
-  async ({ email, password }) => {
+  async ({ username, email, phone, password }) => {
     try {
-      await $api.post('/users/auth/users/', { email, password });
+      await $api.post('/users/register/', { username, email, phone, password });
     } catch (e) {
       return e.error.message;
     }
@@ -33,18 +33,17 @@ export const signUpUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async ({ email, password }) => {
+  async ({ username, email, password }) => {
     try {
       const res = await $api
-        .post('/users/auth/jwt/create/', { email, password })
+        .post('/auth/login/', { username, email, password })
         .then(({ data }) => {
-          localStorage.setItem('accessToken', data.access);
-          localStorage.setItem('refreshToken', data.refresh);
+          localStorage.setItem('accessToken', data.key);
+          return data.key;
         });
       return res;
     } catch (e) {
       localStorage.remove('accessToken');
-      localStorage.remove('refreshToken');
       return e.error.message;
     }
   }
@@ -52,7 +51,6 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', function () {
   localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
 });
 
 export const setPassword = createAsyncThunk(
@@ -95,7 +93,7 @@ export const authSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.isAuthenticated = true;
       state.loading = false;
-      state.username = action.meta.arg.email;
+      state.token = action.payload;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.isAuthenticated = false;
@@ -109,7 +107,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = null;
       state.ids = null;
       state.entities = null;
-      state.email = null;
+      state.mail = null;
     });
     // SET PASSWORD
     builder.addCase(setPassword.pending, (state) => {

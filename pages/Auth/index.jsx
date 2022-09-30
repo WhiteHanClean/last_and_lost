@@ -1,21 +1,35 @@
 import { Button, TextField } from '@mui/material';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../src/store/authSlice';
 import cls from './auth.module.scss';
 
 const Auth = () => {
-  const [name, setName] = useState('');
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name || !email || password) {
-      console.log(email, password);
+    if (!!username || !!email || !!password) {
+      dispatch(
+        loginUser({
+          username,
+          email,
+          password,
+        })
+      );
       setEmail('');
       setPassword('');
-      setName('');
+      setUsername('');
+      router.push('/');
+    } else {
+      alert('user data incorrect');
     }
   };
 
@@ -33,9 +47,9 @@ const Auth = () => {
                 id='name'
                 label='Name'
                 fullWidth
-                value={name}
+                value={username}
                 variant='outlined'
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <TextField
                 autoComplete='off'
