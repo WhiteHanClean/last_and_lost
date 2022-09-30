@@ -23,6 +23,7 @@ const Header = ({ inView }) => {
             <Link href='/#services'>
               <p>Services</p>
             </Link>
+            <Link href="/lost"><p>Lost</p></Link>
             <Link href='/Found'>
               <p>Found</p>
             </Link>

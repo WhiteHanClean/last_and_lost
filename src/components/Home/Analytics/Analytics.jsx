@@ -5,30 +5,30 @@ function Analytics() {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
 
-  useEffect(() => {
-    window.addEventListener('scroll', () => {
-      const { innerHeight, pageYOffset } = window;
+  // useEffect(() => {
+  //   window.addEventListener('scroll', () => {
+  //     const { innerHeight, pageYOffset } = window;
 
-      if (ref) {
-        if (ref.current.offsetTop || 0 <= innerHeight + pageYOffset - 50) {
-          setInView(true);
-        } else {
-          setInView(false);
-        }
-      }
-    });
-    return window.removeEventListener('scroll', () => {
-      const { innerHeight, pageYOffset } = window;
+  //     if (ref) {
+  //       if (ref.current.offsetTop <= innerHeight + pageYOffset - 50) {
+  //         setInView(true);
+  //       } else {
+  //         setInView(false);
+  //       }
+  //     }
+  //   });
+  //   return window.removeEventListener('scroll', () => {
+  //     const { innerHeight, pageYOffset } = window;
 
-      if (ref) {
-        if (ref.current.offsetTop || 0 <= innerHeight + pageYOffset - 50) {
-          setInView(true);
-        } else {
-          setInView(false);
-        }
-      }
-    });
-  }, [ref]);
+  //     if (ref) {
+  //       if (ref.current.offsetTop <= innerHeight + pageYOffset - 50) {
+  //         setInView(true);
+  //       } else {
+  //         setInView(false);
+  //       }
+  //     }
+  //   });
+  // }, [ref]);
 
   return (
     <div className='container' ref={ref}>
