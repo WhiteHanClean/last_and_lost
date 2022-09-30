@@ -22,7 +22,7 @@ const Header = ({ inView }) => {
             <Link href="/"><p>HOME</p></Link>
             <Link href="/profile"><p>Profile</p></Link>
             <Link href="/#services"><p>SERVICES</p></Link>
-            {/* <Link href="/#solutions"><p>SOLUTIONS</p></Link> */}
+            <Link href="/lost"><p>Lost</p></Link>
             <Link href="/"><button className={style.button}>
               log <output></output>
             </button></Link>
