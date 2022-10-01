@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import style from './found.module.scss';
-import { TextField } from '@mui/material';
+
+import { Button, Link, TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-
-import DottedSqIcon from '../../src/assets/svg/Icon-dottedSQ.svg';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
+import DottedSqIcon from '../../src/assets/svg/Icon-dottedSQ.svg';
+import style from './found.module.scss';
 import Image from 'next/image';
 import dayjs from 'dayjs';
 
@@ -20,7 +19,7 @@ const Found = () => {
     geo: '',
     location: '',
     description: '',
-    selectedCategory: '',
+    selectedCategory: 0,
   });
 
   const handleChangeFields = (event) => {
@@ -51,6 +50,13 @@ const Found = () => {
   return (
     <div className={style.block}>
       <div id='contacts' className={style.projectBlock}>
+        <div>
+          <Button variant='contained'>
+            <Link href='/'>
+              <a className={style.breadcrumbs}>Back</a>
+            </Link>
+          </Button>
+        </div>
         <div className={style.titleBlock}>
           <h2>Find your lost item</h2>
         </div>
