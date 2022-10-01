@@ -30,7 +30,7 @@
       font-weight: 800;
       font-size: 53px;
       line-height: 66px;
-
+      color: #ffffff;
       @media (max-width: 768px) {
         font-size: 38px;
         line-height: 48px;
@@ -221,5 +221,17 @@
   padding: 5px;
   &::placeholder {
     color: black;
+  }
+}
+
+.imageBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .imageBlock_img {
+    border-radius: 10px;
+    width: 250px;
+    margin: 20px 0;
+    box-shadow: 0 0 10px black;
   }
 }

@@ -14,123 +14,133 @@ import Image from 'next/image';
 import dayjs from 'dayjs';
 
 const Found = () => {
-  const [date, setDate] = useState(dayjs('2014-08-18T21:11:54'));
-  const [geo, setGeo] = useState('');
-  const [location, setLocation] = useState('');
-  const [description, setDescription] = useState('');
-  const [selectedCategory, setSelectedCategory] = React.useState(0);
+  const [image, setImage] = useState();
+  const [date, setDate] = useState(dayjs());
+  const [foundFields, setFoundFields] = useState({
+    geo: '',
+    location: '',
+    description: '',
+    selectedCategory: '',
+  });
 
-  const data = {
-    date,
-    geo,
-    location,
-    description,
-    selectedCategory,
+  const handleChangeFields = (event) => {
+    setFoundFields((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
   };
 
-  const handleChange = (event) => {
-    setSelectedCategory(event.target.value);
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({
+      ...foundFields,
+      image,
+      date,
+    });
 
-  function gagaTo(obj) {
-    if (!geo || !location || !description || !selectedCategory || !date) {
-      alert('Enter data');
-    } else {
-      sendToServer(obj),
-        setName(''),
-        setEmail(''),
-        setYear(''),
-        setPhone(''),
-        setSelectedValue('');
-    }
-  }
+    setFoundFields({
+      geo: '',
+      location: '',
+      description: '',
+      selectedCategory: '',
+    });
+    setDate(dayjs());
+    setImage('');
+  };
 
   return (
     <div className={style.block}>
-      <div
-        id='contacts'
-        className={style.projectBlock}
-        initial='hidden'
-        whileInView='visible'
-        transition={{ duration: 0.5 }}
-        variants={{
-          visible: { opacity: 1, scale: 1 },
-          hidden: { opacity: 0, scale: 0 },
-        }}
-      >
+      <div id='contacts' className={style.projectBlock}>
         <div className={style.titleBlock}>
-          <h2>Found your lost item</h2>
+          <h2>Find your lost item</h2>
         </div>
-        <div className={style.image_block}>
-          <label className={style.label}>
-            click here to attach the image
-            <input
-              type='file'
-              className={style.inp}
-              onChange={(e) => setImage(e.target.files[0])}
+        <div className={style.imageBlock}>
+          {image && (
+            <img
+              className={style.imageBlock_img}
+              src={URL.createObjectURL(image)}
+              alt='pic'
             />
-          </label>
+          )}
         </div>
-        <div className={style.inputBlock}>
-          <div className={style.inputBlock_first}>
-            <Select
-              defaultValue={'select Category'}
-              sx={{ width: 285 }}
-              labelId='demo-simple-select-label'
-              id='demo-simple-select'
-              value={selectedCategory}
-              label='Age'
-              onChange={handleChange}
-            >
-              <MenuItem value={0}>Select category</MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DesktopDatePicker
-                label='Date found'
-                inputFormat='MM/DD/YYYY'
-                value={date}
-                onChange={handleChange}
-                renderInput={(params) => (
-                  <TextField sx={{ width: 285 }} {...params} />
-                )}
+        <form onSubmit={handleSubmit}>
+          <div className={style.image_block}>
+            <label className={style.label}>
+              click here to attach the image
+              <input
+                type='file'
+                className={style.inp}
+                onChange={(e) => setImage(e.target.files[0])}
               />
-            </LocalizationProvider>
+            </label>
           </div>
-          <div className={style.inputBlock_second}>
-            <TextField
-              autoComplete='off'
-              id='geo'
-              label='Add geotag'
-              value={geo}
-              variant='outlined'
-              onChange={(e) => setGeo(e.target.value)}
-            />
-            <TextField
-              autoComplete='off'
-              id='Pickup'
-              label='Pickup location'
-              value={location}
-              ariant='outlined'
-              onChange={(e) => setLocation(e.target.value)}
-            />
+          <div className={style.inputBlock}>
+            <div className={style.inputBlock_first}>
+              <Select
+                defaultValue={'select Category'}
+                sx={{ width: 285 }}
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                name='selectedCategory'
+                value={foundFields.selectedCategory}
+                label='Age'
+                onChange={(e) => handleChangeFields(e)}
+              >
+                <MenuItem value={0}>Select category</MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DesktopDatePicker
+                  label='Date found'
+                  inputFormat='MM/DD/YYYY'
+                  value={date}
+                  onChange={(event) => setDate(event)}
+                  renderInput={(params) => (
+                    <TextField sx={{ width: 285 }} {...params} />
+                  )}
+                />
+              </LocalizationProvider>
+            </div>
+            <div className={style.inputBlock_second}>
+              <TextField
+                autoComplete='off'
+                id='geo'
+                name='geo'
+                label='Add geotag'
+                value={foundFields.geo}
+                required
+                variant='outlined'
+                onChange={(e) => handleChangeFields(e)}
+              />
+              <TextField
+                autoComplete='off'
+                id='Pickup'
+                name='location'
+                required
+                label='Pickup location'
+                value={foundFields.location}
+                ariant='outlined'
+                onChange={(e) => handleChangeFields(e)}
+              />
+            </div>
+            <div className={style.inputBlock_third}>
+              <textarea
+                value={foundFields.description}
+                name='description'
+                onChange={(e) => handleChangeFields(e)}
+                placeholder='Description'
+                className={style.textArea}
+              />
+            </div>
+            <div className={style.inputBlock_footer}>
+              <button type='submit' className={style.button}>
+                Apply
+              </button>
+            </div>
           </div>
-          <div className={style.inputBlock_third}>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder='Description'
-              className={style.textArea}
-            />
-          </div>
-          <div className={style.inputBlock_footer}>
-            <button className={style.button} onClick={() => gagaTo(data)}>
-              Apply
-            </button>
-          </div>
-        </div>
+        </form>
         <div className={style.rightDotted}>
           <Image src={DottedSqIcon} />
         </div>

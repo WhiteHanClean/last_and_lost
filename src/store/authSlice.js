@@ -38,7 +38,7 @@ export const loginUser = createAsyncThunk(
       const res = await $api
         .post('/auth/login/', { username, email, password })
         .then(({ data }) => {
-          localStorage.setItem('accessToken', data.key);
+          window.localStorage.setItem('accessToken', data.key);
           return data.key;
         });
       return res;
@@ -50,7 +50,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', function () {
-  localStorage.removeItem('accessToken');
+  window.localStorage.removeItem('accessToken');
 });
 
 export const setPassword = createAsyncThunk(

@@ -2,6 +2,7 @@ import React from 'react';
 import style from './Header.module.scss';
 import { MainMenu } from './Menu/MainMenu';
 import Link from 'next/link';
+
 const Header = ({ inView }) => {
   return (
     <header className={`${style.mainHeader} ${style.mainHeaderWhite}`}>
@@ -30,9 +31,7 @@ const Header = ({ inView }) => {
               <p>Found</p>
             </Link>
             <Link href='/Auth'>
-              <button className={style.button}>
-                Login <output></output>
-              </button>
+              <button className={style.button}>Login</button>
             </Link>
           </div>
           <div className={style.burger}>
