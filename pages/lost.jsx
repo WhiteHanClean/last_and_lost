@@ -1,16 +1,11 @@
-import Headers from "../src/components/Header/Header";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import { Layout, Menu } from "antd";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Card } from "antd";
-import { Button, Modal } from "antd";
+import Headers from '../src/components/Header/Header';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { Layout, Menu } from 'antd';
+import React, { useState, useEffect } from 'react';
+
+import { Card } from 'antd';
+import { Modal } from 'antd';
+import $api from '../src/utils/axios';
 
 const { Header, Sider, Content } = Layout;
 const { Meta } = Card;
@@ -22,15 +17,14 @@ const Lost = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const BASE_URL = "https://ala-too-project.herokuapp.com/api/categories/";
+  const BASE_URL = 'https://ala-too-project.herokuapp.com/api/categories/';
 
   useEffect(() => {
-    axios
-      .get(BASE_URL)
-      .then((response) => setCategories(response.data.results));
+    $api.get(BASE_URL).then((response) => setCategories(response.data.results));
+    $api
+      .get('https://ala-too-project.herokuapp.com/api/items/')
+      .then((response) => console.log(response));
   }, []);
-
-  console.log(categories);
 
   const infite = (product) => {
     setProducts(product);
@@ -51,7 +45,7 @@ const Lost = () => {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    console.log('Clicked cancel button');
     setOpen(false);
   };
 
@@ -65,16 +59,15 @@ const Lost = () => {
           collapsible
           collapsed={collapsed}
           style={{
-            height: "100vh",
-            marginTop: "80px",
-            background: "white",
+            height: '100vh',
+            marginTop: '80px',
+            background: 'white',
           }}
         >
-          <div className="logo" />
+          <div className='logo' />
           <Menu
-            //   theme="dark"
-            mode="inline"
-            defaultSelectedKeys={["1"]}
+            mode='inline'
+            defaultSelectedKeys={['1']}
             items={categories.map((item, i) => {
               return {
                 key: i,
@@ -85,13 +78,13 @@ const Lost = () => {
           />
         </Sider>
         <Layout
-          className="site-layout"
+          className='site-layout'
           style={{
-            marginTop: "80px",
+            marginTop: '80px',
           }}
         >
           <Header
-            className="site-layout-background"
+            className='site-layout-background'
             style={{
               padding: 0,
             }}
@@ -99,20 +92,26 @@ const Lost = () => {
             {React.createElement(
               collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
               {
-                className: "trigger",
+                className: 'trigger',
                 onClick: () => setCollapsed(!collapsed),
               }
             )}
           </Header>
           <Content
-            className="site-layout-background"
+            className='site-layout-background'
             style={{
-              margin: "24px 16px",
+              margin: '24px 16px',
               padding: 24,
               minHeight: 280,
             }}
           >
-            <div style={{display: "flex", justifyContent: "space-around", flexWrap: "wrap"}}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                flexWrap: 'wrap',
+              }}
+            >
               {products.map((product) => {
                 return (
                   <Card
@@ -122,7 +121,13 @@ const Lost = () => {
                       marginRight: '20px',
                       marginBottom: '20px',
                     }}
-                    cover={<img style={{width: '240px', height: '280px'}} alt="example" src={product.picture} />}
+                    cover={
+                      <img
+                        style={{ width: '240px', height: '280px' }}
+                        alt='example'
+                        src={product.picture}
+                      />
+                    }
                     onClick={() => showModal(product)}
                   >
                     <Meta
@@ -143,14 +148,14 @@ const Lost = () => {
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
-        style={{maxWidth:'800px', height:'100%'}}
+        style={{ maxWidth: '800px', height: '100%' }}
       >
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
           <div>
             <img
-              style={{ height: "150px", width: "150px" }}
+              style={{ height: '150px', width: '150px' }}
               src={modalText.picture}
-              alt="img"
+              alt='img'
             />
           </div>
           <div>
@@ -170,7 +175,7 @@ const Lost = () => {
               <b>Место для возврата</b> : {modalText.pickup_location}
             </p>
             <p>
-              <b>Телефон номера</b> : <a href="">{modalText.phone_number}</a>
+              <b>Телефон номера</b> : <a href=''>{modalText.phone_number}</a>
             </p>
           </div>
         </div>

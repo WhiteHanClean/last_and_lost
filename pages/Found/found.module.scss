@@ -62,6 +62,12 @@
     flex-direction: column;
     grid-gap: 16px;
     z-index: 2;
+    .zerolvl {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
     &_first {
       width: 100%;
       display: flex;

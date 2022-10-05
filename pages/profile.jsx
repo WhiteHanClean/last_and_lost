@@ -1,143 +1,105 @@
-import React, { useState } from "react";
-import Header from "../src/components/Header/Header";
-import s from "../src/style/profile.module.scss";
-import { PlusOutlined } from "@ant-design/icons";
-import { Modal, Upload } from "antd";
+import { TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Header from '../src/components/Header/Header';
+import { getUser, updateUser } from '../src/store/authSlice';
+import s from '../src/style/profile.module.scss';
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    reader.onload = () => resolve(reader.result);
-
-    reader.onerror = (error) => reject(error);
-  });
 const Profile = () => {
+  const dispatch = useDispatch();
+  const { id, user: profile } = useSelector((state) => state.auth);
+
+  const [picture, setImage] = useState();
   const [user, setUser] = useState({
-    name: "Han Okaski",
-    contacts: [
-      {
-        name: "Contact number",
-        description: "0709849789",
-      },
-      {
-        name: "Alternative number",
-        description: "0709849789",
-      },
-      {
-        name: "Alternative email",
-        description: "0709849789",
-      },
-    ],
+    name: 'Default name',
+    number: 'Default phone',
+    email: 'Default email',
+    id: 'Default id',
   });
-  const [editUser, setEditUser] = useState(true);
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([
-  ]);
-
-  const handleCancel = () => setPreviewOpen(false);
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
+  const handler = (e) => {
+    setUser((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  useEffect(() => {
+    dispatch(getUser(id));
+    setUser({
+      name: profile?.username,
+      number: profile?.phone,
+      email: profile?.email,
+      id: profile?.id,
+    });
+  }, [id]);
 
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-          border: 'none !important'
-        }}
-      >
-        Upload
-      </div>
-    </div>
-  );
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append('username', user.name);
+    data.append('email', user.email);
+    data.append('phone', user.phone);
+    data.append('picture', picture);
+    dispatch(updateUser(data));
+  };
 
-  console.log(user.contacts[0].description);
   return (
     <div>
       <Header />
 
-      <div className="profile">
-        <div className={s.profile_flex}>
-          <div className={s.profile_info}>
-            <Upload
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={handlePreview}
-              onChange={handleChange}
-              style={{width:"350px !important",height:"300px !important", border:"none  !important"}}
-            >
-              {fileList.length >= 1 ? null : uploadButton}
-            </Upload>
-            <Modal
-              open={previewOpen}
-              title={previewTitle}
-              footer={null}
-              onCancel={handleCancel}
-            >
-              <img
-                alt="example"
-                style={{
-                  width: "100%",
-                }}
-                src={previewImage}
-              />
-            </Modal>
-            <h2>{user.name}</h2>
-          </div>
+      <div className={s.profile}>
+        <div>
+          <form className={s.profile_flex} onSubmit={(e) => handleSubmit(e)}>
+            <div className={s.profile_info}>
+              <div className={s.image_block}>
+                <label className={s.label}>
+                  Upload image
+                  <input
+                    type='file'
+                    className={s.inp}
+                    onChange={(e) => setImage(e.target.files[0])}
+                  />
+                  <div className={s.imageBlock}>
+                    {picture && (
+                      <div>
+                        <img
+                          className={s.imageBlock_img}
+                          src={URL.createObjectURL(picture)}
+                          alt='pic'
+                        />
+                      </div>
+                    )}
+                  </div>
+                </label>
+                {picture && (
+                  <button onClick={() => setImage()} className={s.clear}>
+                    X
+                  </button>
+                )}
+              </div>
+              <h2>{user.name}</h2>
+            </div>
 
-          <div className={s.profile_contacts}>
-            {user.contacts.map((item, i) => {
-              return (
-                <div className={s.items}>
-                  <h2>{item.name}</h2>
-                  {editUser !== true ? (
-                    <p>{item.decription}</p>
-                  ) : (
-                    <input
-                      placeholder="asdas"
-                      onChange={(e) => {
-                        setUser({
-                          ...user,
-                          contacts: [
-                            ...user.contacts,
-                            {
-                              ...user.contacts[i],
-                              description: e.target.value,
-                            },
-                          ],
-                        });
-                      }}
-                    />
-                  )}
-                </div>
-              );
-            })}
-            <button
-              className={s.profile_btn}
-              onClick={() => setEditUser(!editUser)}
-            >
-              Редактировать
-            </button>
-          </div>
+            <div className={s.profile_contacts}>
+              <div className={s.fields}>
+                <TextField
+                  placeholder='email'
+                  value={user.email}
+                  name='email'
+                  onChange={(e) => handler(e)}
+                />
+
+                <TextField
+                  placeholder='number'
+                  value={user.number}
+                  name='number'
+                  onChange={(e) => handler(e)}
+                />
+              </div>
+              <button className={s.profile_btn}>Редактировать</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

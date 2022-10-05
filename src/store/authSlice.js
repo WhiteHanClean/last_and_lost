@@ -6,15 +6,13 @@ import {
 import $api from '../utils/axios';
 
 const initialState = {
-  signup: false,
   loading: false,
   error: null,
-  username: null,
-  tel: null,
-  mail: null,
+  user: null,
   ids: [],
+  id: null,
   entities: {},
-  token: null,
+  isLoggedIn: false,
 };
 
 export const authAdapter = createEntityAdapter();
@@ -31,6 +29,26 @@ export const signUpUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  'auth/updateUser',
+  async (params) => {
+    try {
+      await $api.patch('/auth/user/', params);
+    } catch (e) {
+      return e.error.message;
+    }
+  }
+);
+
+export const getUser = createAsyncThunk('auth/getUser', async (id) => {
+  try {
+    const { data } = await $api.get(`/users/${id}`);
+    return data;
+  } catch (e) {
+    return e.error.message;
+  }
+});
+
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ username, email, password }) => {
@@ -38,19 +56,22 @@ export const loginUser = createAsyncThunk(
       const res = await $api
         .post('/auth/login/', { username, email, password })
         .then(({ data }) => {
-          window.localStorage.setItem('accessToken', data.key);
-          return data.key;
+          window.localStorage.setItem('access_token', data.access_token);
+          window.localStorage.setItem('refresh_token', data.refresh_token);
+          return data;
         });
       return res;
     } catch (e) {
-      localStorage.remove('accessToken');
+      window.localStorage.setItem('access_token');
+      window.localStorage.setItem('refresh_token');
       return e.error.message;
     }
   }
 );
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', function () {
-  window.localStorage.removeItem('accessToken');
+  window.localStorage.removeItem('access_token');
+  window.localStorage.removeItem('refresh_token');
 });
 
 export const setPassword = createAsyncThunk(
@@ -78,12 +99,10 @@ export const authSlice = createSlice({
     });
     builder.addCase(signUpUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.signup = true;
       state.error = null;
     });
     builder.addCase(signUpUser.rejected, (state, action) => {
       state.error = action.error.message;
-      state.signup = false;
       state.loading = false;
     });
     //USER LOGIN
@@ -93,11 +112,24 @@ export const authSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.isAuthenticated = true;
       state.loading = false;
-      state.token = action.payload;
+      state.isLoggedIn = true;
+      state.id = action.payload.user.pk;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.isAuthenticated = false;
-      state.username = null;
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    // GET USER
+    builder.addCase(getUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+    });
+    builder.addCase(getUser.rejected, (state, action) => {
+      state.user = null;
       state.loading = false;
       state.error = action.error.message;
     });
@@ -107,7 +139,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = null;
       state.ids = null;
       state.entities = null;
-      state.mail = null;
+      state.isLoggedIn = false;
     });
     // SET PASSWORD
     builder.addCase(setPassword.pending, (state) => {

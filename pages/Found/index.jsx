@@ -11,15 +11,26 @@ import DottedSqIcon from '../../src/assets/svg/Icon-dottedSQ.svg';
 import style from './found.module.scss';
 import Image from 'next/image';
 import dayjs from 'dayjs';
+import { useDispatch } from 'react-redux';
+import { createPost } from '../../src/store/foundSlice';
+
+const categoryConfig = [
+  { id: 4, title: 'Выберите категорию' },
+  { id: 1, title: 'Электроника' },
+  { id: 2, title: 'Документы' },
+  { id: 3, title: 'Прочее' },
+];
 
 const Found = () => {
-  const [image, setImage] = useState();
+  const dispatch = useDispatch();
+  const [picture, setImage] = useState();
   const [date, setDate] = useState(dayjs());
+  const [category, setCategory] = useState(4);
   const [foundFields, setFoundFields] = useState({
-    geo: '',
-    location: '',
+    title: '',
+    geotag: '',
+    pickup_location: '',
     description: '',
-    selectedCategory: 0,
   });
 
   const handleChangeFields = (event) => {
@@ -29,47 +40,54 @@ const Found = () => {
     }));
   };
 
+  const handleSetCategory = (e) => {
+    setCategory(e.target.value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      ...foundFields,
-      image,
-      date,
-    });
+    const data = new FormData();
+    data.append('title', foundFields.title);
+    data.append('category', category);
+    data.append('picture', picture);
+    data.append('geotag', foundFields.geotag);
+    data.append('description', foundFields.description);
+    data.append('pickup_location', foundFields.pickup_location);
 
+    dispatch(createPost(data));
     setFoundFields({
-      geo: '',
-      location: '',
+      title: '',
+      geotag: '',
+      pickup_location: '',
       description: '',
-      selectedCategory: '',
     });
     setDate(dayjs());
-    setImage('');
+    setImage();
   };
 
   return (
     <div className={style.block}>
       <div id='contacts' className={style.projectBlock}>
         <div>
-          <Button variant='contained'>
-            <Link href='/'>
-              <a className={style.breadcrumbs}>Back</a>
-            </Link>
-          </Button>
+          <Link href='/'>
+            <Button className={style.breadcrumbs} variant='contained'>
+              Back
+            </Button>
+          </Link>
         </div>
         <div className={style.titleBlock}>
           <h2>Find your lost item</h2>
         </div>
         <div className={style.imageBlock}>
-          {image && (
+          {picture && (
             <img
               className={style.imageBlock_img}
-              src={URL.createObjectURL(image)}
+              src={URL.createObjectURL(picture)}
               alt='pic'
             />
           )}
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <div className={style.image_block}>
             <label className={style.label}>
               click here to attach the image
@@ -81,21 +99,31 @@ const Found = () => {
             </label>
           </div>
           <div className={style.inputBlock}>
+            <div className={style.zerolvl}>
+              <TextField
+                autoComplete='off'
+                id='title'
+                name='title'
+                label='Add title'
+                value={foundFields.title}
+                required
+                variant='outlined'
+                onChange={(e) => handleChangeFields(e)}
+              />
+            </div>
             <div className={style.inputBlock_first}>
               <Select
-                defaultValue={'select Category'}
                 sx={{ width: 285 }}
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
-                name='selectedCategory'
-                value={foundFields.selectedCategory}
-                label='Age'
-                onChange={(e) => handleChangeFields(e)}
+                value={category}
+                onChange={(e) => handleSetCategory(e)}
               >
-                <MenuItem value={0}>Select category</MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {categoryConfig.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.title}
+                  </MenuItem>
+                ))}
               </Select>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DesktopDatePicker
@@ -112,10 +140,10 @@ const Found = () => {
             <div className={style.inputBlock_second}>
               <TextField
                 autoComplete='off'
-                id='geo'
-                name='geo'
+                id='geotag'
+                name='geotag'
                 label='Add geotag'
-                value={foundFields.geo}
+                value={foundFields.geotag}
                 required
                 variant='outlined'
                 onChange={(e) => handleChangeFields(e)}
@@ -123,10 +151,10 @@ const Found = () => {
               <TextField
                 autoComplete='off'
                 id='Pickup'
-                name='location'
+                name='pickup_location'
                 required
                 label='Pickup location'
-                value={foundFields.location}
+                value={foundFields.pickup_location}
                 ariant='outlined'
                 onChange={(e) => handleChangeFields(e)}
               />

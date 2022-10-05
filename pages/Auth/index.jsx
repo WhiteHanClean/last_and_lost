@@ -1,15 +1,16 @@
 import { Button, TextField } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../src/store/authSlice';
 import cls from './auth.module.scss';
 
 const Auth = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { loading, isLoggedIn } = useSelector((state) => state.auth);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,11 +28,14 @@ const Auth = () => {
       setEmail('');
       setPassword('');
       setUsername('');
-      router.push('/');
     } else {
       alert('user data incorrect');
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn) router.push('/');
+  }, [isLoggedIn]);
 
   return (
     <div className={cls.container}>
@@ -64,7 +68,6 @@ const Auth = () => {
                 autoComplete='off'
                 fullWidth
                 id='pass'
-                type={'number'}
                 label='Password'
                 value={password}
                 variant='outlined'
