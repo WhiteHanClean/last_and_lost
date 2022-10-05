@@ -21,22 +21,17 @@ const Lost = () => {
 
   useEffect(() => {
     $api.get(BASE_URL).then((response) => setCategories(response.data.results));
-    $api
-      .get('https://ala-too-project.herokuapp.com/api/items/')
-      .then((response) => console.log(response));
   }, []);
 
   const infite = (product) => {
     setProducts(product);
   };
   const showModal = (product) => {
-    console.log(product);
     setModalText(product);
     setOpen(true);
   };
 
   const handleOk = () => {
-    // setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -45,7 +40,6 @@ const Lost = () => {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setOpen(false);
   };
 

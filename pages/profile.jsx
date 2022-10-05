@@ -1,20 +1,29 @@
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../src/components/Header/Header';
-import { getUser, updateUser } from '../src/store/authSlice';
+import { getUser, setPassword, updateUser } from '../src/store/authSlice';
 import s from '../src/style/profile.module.scss';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { id, user: profile } = useSelector((state) => state.auth);
+  const { id, user: profile, errorpass } = useSelector((state) => state.auth);
 
   const [picture, setImage] = useState();
   const [user, setUser] = useState({
-    name: 'Default name',
-    number: 'Default phone',
-    email: 'Default email',
-    id: 'Default id',
+    username: 'name',
+    phone: 'phone',
+    email: 'email',
+    id: 'id',
+  });
+
+  const [passwordChange, setPasswordChange] = useState({
+    new_password1: '',
+    new_password2: '',
   });
 
   const handler = (e) => {
@@ -24,24 +33,45 @@ const Profile = () => {
     }));
   };
 
+  const handlerPass = (e) => {
+    setPasswordChange((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   useEffect(() => {
     dispatch(getUser(id));
-    setUser({
-      name: profile?.username,
-      number: profile?.phone,
-      email: profile?.email,
-      id: profile?.id,
-    });
   }, [id]);
+
+  useEffect(() => {
+    setUser({
+      username: profile?.user.username,
+      phone: +profile?.user.phone,
+      email: profile?.user.email,
+      id: profile?.user.id,
+    });
+  }, [profile]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append('username', user.name);
-    data.append('email', user.email);
-    data.append('phone', user.phone);
-    data.append('picture', picture);
-    dispatch(updateUser(data));
+
+    dispatch(updateUser(user));
+  };
+
+  const handleSubmitPass = (e) => {
+    e.preventDefault();
+
+    if (passwordChange.new_password1 === passwordChange.new_password2) {
+      dispatch(
+        setPassword({
+          new_password1: passwordChange.new_password1,
+          new_password2: passwordChange.new_password2,
+        })
+      );
+    } else {
+      alert('password incorrect');
+    }
   };
 
   return (
@@ -78,28 +108,76 @@ const Profile = () => {
                   </button>
                 )}
               </div>
-              <h2>{user.name}</h2>
+              <TextField
+                value={user.username}
+                label='username'
+                name='username'
+                onChange={(e) => handler(e)}
+              />
             </div>
 
             <div className={s.profile_contacts}>
               <div className={s.fields}>
                 <TextField
-                  placeholder='email'
                   value={user.email}
+                  label='email'
                   name='email'
                   onChange={(e) => handler(e)}
                 />
 
                 <TextField
-                  placeholder='number'
-                  value={user.number}
-                  name='number'
+                  value={user.phone}
+                  type='number'
+                  label='phone'
+                  name='phone'
                   onChange={(e) => handler(e)}
                 />
               </div>
               <button className={s.profile_btn}>Редактировать</button>
             </div>
           </form>
+        </div>
+        <div className={s.accordion_block}>
+          <Accordion>
+            <AccordionSummary
+              aria-controls='panel1a-content'
+              id='panel1a-header'
+            >
+              <Typography>Change password</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <form onSubmit={(e) => handleSubmitPass(e)} className={s.form}>
+                <TextField
+                  value={passwordChange.new_password1}
+                  label='new password'
+                  name='new_password1'
+                  fullWidth
+                  onChange={(e) => handlerPass(e)}
+                />
+                <TextField
+                  value={passwordChange.new_password2}
+                  label='new password'
+                  name='new_password2'
+                  fullWidth
+                  onChange={(e) => handlerPass(e)}
+                />
+
+                <Button
+                  fullWidth
+                  type='submit'
+                  sx={{ marginTop: '20px' }}
+                  variant='outlined'
+                  className={s.button_pass}
+                >
+                  Submit
+                </Button>
+              </form>
+              <div>
+                {errorpass.new_password2?.map((item) => item) ||
+                  errorpass.new_password1?.map((item) => item)}
+              </div>
+            </AccordionDetails>
+          </Accordion>
         </div>
       </div>
     </div>

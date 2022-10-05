@@ -1,6 +1,6 @@
-import * as React from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import * as React from 'react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 const variants = {
   open: {
@@ -41,7 +41,7 @@ export const Navigation = ({ toggle }) => (
         key={id}
       >
         <Link href={link}>
-          <a style={{textDecoration: 'none'}}>{title}</a>
+          <a style={{ textDecoration: 'none' }}>{title}</a>
         </Link>
       </motion.li>
     ))}
@@ -50,28 +50,28 @@ export const Navigation = ({ toggle }) => (
 
 const menuItems = [
   {
-    id: "mainMenuItem-1",
-    title: "HOME",
-    link: "/",
+    id: 'mainMenuItem-1',
+    title: 'HOME',
+    link: '/',
   },
   {
-    id: "mainMenuItem-2",
-    title: "SERVICES",
-    link: "/#services",
+    id: 'mainMenuItem-2',
+    title: 'SERVICES',
+    link: '/#services',
   },
   {
-    id: "mainMenuItem-3",
-    title: "CONTACTS",
-    link: "/#contacts",
+    id: 'mainMenuItem-3',
+    title: 'LOST',
+    link: '/lost',
   },
-  // {
-  //   id: "mainMenuItem-5",
-  //   title: "SOLUTIONS",
-  //   link: "/#solutions",
-  // },
   {
-    id: "mainMenuItem-6",
-    title: "ABOUT US",
-    link: "/#about",
+    id: 'mainMenuItem-6',
+    title: 'PROFILE',
+    link: '/profile',
+  },
+  {
+    id: 'mainMenuItem-6',
+    title: 'FOUND',
+    link: '/Found',
   },
 ];

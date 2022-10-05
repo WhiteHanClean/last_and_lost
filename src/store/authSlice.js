@@ -8,6 +8,7 @@ import $api from '../utils/axios';
 const initialState = {
   loading: false,
   error: null,
+  errorpass: [],
   user: null,
   ids: [],
   id: null,
@@ -29,25 +30,49 @@ export const signUpUser = createAsyncThunk(
   }
 );
 
-export const updateUser = createAsyncThunk(
-  'auth/updateUser',
-  async (params) => {
-    try {
-      await $api.patch('/auth/user/', params);
-    } catch (e) {
-      return e.error.message;
-    }
+export const updateUser = createAsyncThunk('auth/updateUser', async (user) => {
+  try {
+    await $api.patch(`/users/${user.id}/`, {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      phone: user.phone,
+    });
+  } catch (e) {
+    return e.error.message;
   }
-);
+});
 
 export const getUser = createAsyncThunk('auth/getUser', async (id) => {
   try {
-    const { data } = await $api.get(`/users/${id}`);
+    const { data } = await $api.get(`/profiles/${id}`);
+
     return data;
   } catch (e) {
     return e.error.message;
   }
 });
+
+export const setPassword = createAsyncThunk(
+  'auth/setPassword',
+  async ({ new_password1, new_password2 }) => {
+    try {
+      const data = await $api
+        .post('/auth/password/change/', {
+          new_password1,
+          new_password2,
+        })
+        .catch(function (error) {
+          if (error.response) {
+            return error.response.data;
+          }
+        });
+      return data;
+    } catch (e) {
+      return rejectWithValue(err);
+    }
+  }
+);
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
@@ -73,20 +98,6 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', function () {
   window.localStorage.removeItem('access_token');
   window.localStorage.removeItem('refresh_token');
 });
-
-export const setPassword = createAsyncThunk(
-  'auth/setPassword',
-  async ({ new_password, current_password }) => {
-    try {
-      await $api.post('/users/auth/users/set_password/', {
-        new_password,
-        current_password,
-      });
-    } catch (e) {
-      return e.error.message;
-    }
-  }
-);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -145,8 +156,9 @@ export const authSlice = createSlice({
     builder.addCase(setPassword.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(setPassword.fulfilled, (state) => {
+    builder.addCase(setPassword.fulfilled, (state, action) => {
       state.loading = false;
+      state.errorpass = action.payload;
     });
     builder.addCase(setPassword.rejected, (state, action) => {
       state.error = action.error;

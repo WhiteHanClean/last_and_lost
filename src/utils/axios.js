@@ -38,11 +38,11 @@ $api.interceptors.response.use(
     ) {
       originalRequest._isRetry = true;
       try {
-        const response = await $api.post(
-          '/auth/token/refresh/',
-          localStorage.getItem('refresh_token')
-        );
-        localStorage.setItem('access_token', response.data.access_token);
+        const response = await $api.post('/auth/token/refresh/', {
+          refresh: localStorage.getItem('refresh_token'),
+        });
+
+        localStorage.setItem('access_token', response.data.access);
         return $api.request(originalRequest);
       } catch (error) {
         return Promise.reject(error);
