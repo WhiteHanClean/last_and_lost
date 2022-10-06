@@ -22,6 +22,7 @@ const Lost = () => {
   useEffect(() => {
     $api.get(BASE_URL).then((response) => setCategories(response.data.results));
   }, []);
+  console.log(categories);
 
   const infite = (product) => {
     setProducts(product);

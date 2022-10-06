@@ -13,7 +13,6 @@ export const createPost = createAsyncThunk(
   async (params) => {
     try {
       const { data } = await $api.post('/items/', params);
-      console.log(data);
       return data;
     } catch (e) {
       console.log(e.message);
