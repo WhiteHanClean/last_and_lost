@@ -5,24 +5,29 @@ import React, { useState, useEffect } from 'react';
 
 import { Card } from 'antd';
 import { Modal } from 'antd';
-import $api from '../src/utils/axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCotegories } from '../src/store/foundSlice';
 
 const { Header, Sider, Content } = Layout;
 const { Meta } = Card;
 
 const Lost = () => {
+  const { categories: category } = useSelector((state) => state.found);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const BASE_URL = 'https://ala-too-project.herokuapp.com/api/categories/';
 
   useEffect(() => {
-    $api.get(BASE_URL).then((response) => setCategories(response.data.results));
+    dispatch(getCotegories());
   }, []);
-  console.log(categories);
+
+  useEffect(() => {
+    setCategories(category);
+  }, [category]);
 
   const infite = (product) => {
     setProducts(product);

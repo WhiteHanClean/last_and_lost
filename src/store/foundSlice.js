@@ -6,6 +6,7 @@ const initialState = {
   posts: [],
   error: null,
   laoding: false,
+  categories: [],
 };
 
 export const createPost = createAsyncThunk(
@@ -13,6 +14,18 @@ export const createPost = createAsyncThunk(
   async (params) => {
     try {
       const { data } = await $api.post('/items/', params);
+      return data;
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+);
+
+export const getCotegories = createAsyncThunk(
+  'post/getCotegories',
+  async () => {
+    try {
+      const { data } = await $api.get('/categories/');
       return data;
     } catch (e) {
       console.log(e.message);
@@ -49,7 +62,6 @@ export const foundSlice = createSlice({
     [createPost.fulfilled]: (state, action) => {
       state.laoding = false;
       state.posts.push(action.payload);
-      console.log(action);
     },
     [createPost.rejected]: (state) => {
       state.laoding = false;
@@ -63,6 +75,17 @@ export const foundSlice = createSlice({
     },
     [getAllPosts.rejected]: (state) => {
       state.laoding = false;
+    },
+    [getCotegories.pending]: (state) => {
+      state.laoding = true;
+    },
+    [getCotegories.fulfilled]: (state, action) => {
+      state.laoding = false;
+      state.categories = action.payload.results;
+    },
+    [getCotegories.rejected]: (state, action) => {
+      state.laoding = false;
+      state.error = action.error;
     },
     [removePost.pending]: (state) => {
       state.laoding = true;

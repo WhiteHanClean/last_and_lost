@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, Link, TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -11,19 +11,19 @@ import DottedSqIcon from '../../src/assets/svg/Icon-dottedSQ.svg';
 import style from './found.module.scss';
 import Image from 'next/image';
 import dayjs from 'dayjs';
-import { useDispatch } from 'react-redux';
-import { createPost } from '../../src/store/foundSlice';
-
-const categoryConfig = [
-  { id: 4, title: 'Выберите категорию' },
-  { id: 1, title: 'Электроника' },
-  { id: 2, title: 'Документы' },
-  { id: 3, title: 'Прочее' },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost, getCotegories } from '../../src/store/foundSlice';
 
 const Found = () => {
   const dispatch = useDispatch();
   const [picture, setImage] = useState();
+  const [categoryConfig, setCategoryConfig] = useState([
+    { id: 4, title: 'Выберите категорию' },
+    { id: 1, title: 'Электроника' },
+    { id: 2, title: 'Документы' },
+    { id: 3, title: 'Прочее' },
+  ]);
+  const { categories } = useSelector((state) => state.found);
   const [date, setDate] = useState(dayjs());
   const [category, setCategory] = useState(4);
   const [foundFields, setFoundFields] = useState({
@@ -32,7 +32,7 @@ const Found = () => {
     pickup_location: '',
     description: '',
   });
-
+  console.log(categories);
   const handleChangeFields = (event) => {
     setFoundFields((prev) => ({
       ...prev,
@@ -64,6 +64,14 @@ const Found = () => {
     setDate(dayjs());
     setImage();
   };
+
+  useEffect(() => {
+    dispatch(getCotegories());
+  }, []);
+
+  useEffect(() => {
+    setCategoryConfig(categories);
+  }, [categories]);
 
   return (
     <div className={style.block}>
