@@ -1,12 +1,12 @@
 import Headers from '../src/components/Header/Header';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { Button, Input, Layout, Menu } from 'antd';
 import React, { useState, useEffect } from 'react';
 
 import { Card } from 'antd';
 import { Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCotegories } from '../src/store/foundSlice';
+import { createCategories, getCotegories } from '../src/store/foundSlice';
 
 const { Header, Sider, Content } = Layout;
 const { Meta } = Card;
@@ -15,7 +15,10 @@ const Lost = () => {
   const { categories: category } = useSelector((state) => state.found);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [titleAdd, setTitleAdd] = useState('');
+  const [openAdd, setOpenAdd] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [confirmLoadingAdd, setConfirmLoadingAdd] = useState(false);
   const [modalText, setModalText] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -37,6 +40,10 @@ const Lost = () => {
     setOpen(true);
   };
 
+  const showModalAdd = () => {
+    setOpenAdd(true);
+  };
+
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
@@ -45,15 +52,30 @@ const Lost = () => {
     }, 2000);
   };
 
+  const handleOkAdd = () => {
+    setConfirmLoadingAdd(true);
+    dispatch(createCategories({ title: titleAdd }));
+    dispatch(getCotegories());
+    setConfirmLoadingAdd(false);
+  };
+
   const handleCancel = () => {
     setOpen(false);
   };
+
+  const handleCancelAdd = () => {
+    setOpenAdd(false);
+  };
+
+  const handleCreateCategory = () => {};
 
   return (
     <>
       <Layout>
         <Headers />
-
+        <div className={'add_block'}>
+          <Button onClick={(e) => showModalAdd()}>Добавить категорию</Button>
+        </div>
         <Sider
           trigger={null}
           collapsible
@@ -141,6 +163,21 @@ const Lost = () => {
           </Content>
         </Layout>
       </Layout>
+      <Modal
+        open={openAdd}
+        onOk={handleOkAdd}
+        confirmLoading={confirmLoadingAdd}
+        onCancel={handleCancelAdd}
+        style={{ maxWidth: '800px', height: '100%' }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <Input
+            style={{ width: '80%' }}
+            value={titleAdd}
+            onChange={(e) => setTitleAdd(e.target.value)}
+          />
+        </div>
+      </Modal>
 
       <Modal
         title={modalText.title}

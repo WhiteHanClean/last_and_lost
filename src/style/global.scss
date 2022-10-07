@@ -180,3 +180,9 @@ button {
     margin-bottom: 20px !important;
   }
 }
+.add_block {
+  position: fixed;
+  z-index: 1000;
+  top: 80%;
+  right: 5%;
+}

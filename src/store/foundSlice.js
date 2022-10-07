@@ -21,6 +21,19 @@ export const createPost = createAsyncThunk(
   }
 );
 
+export const createCategories = createAsyncThunk(
+  'post/createCategories',
+  async ({ title }) => {
+    try {
+      const { data } = await $api.post('/categories/', { title });
+      console.log(data);
+      return data;
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+);
+
 export const getCotegories = createAsyncThunk(
   'post/getCotegories',
   async () => {
@@ -84,6 +97,17 @@ export const foundSlice = createSlice({
       state.categories = action.payload.results;
     },
     [getCotegories.rejected]: (state, action) => {
+      state.laoding = false;
+      state.error = action.error;
+    },
+    [createCategories.pending]: (state) => {
+      state.laoding = true;
+    },
+    [createCategories.fulfilled]: (state, action) => {
+      state.laoding = false;
+      console.log(action);
+    },
+    [createCategories.rejected]: (state, action) => {
       state.laoding = false;
       state.error = action.error;
     },
